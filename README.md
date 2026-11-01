@@ -1,8 +1,10 @@
 # Soda Swap Saga
 
+**Play it:** https://scruff2.github.io/soda-swap-saga/
+
 A match-3 saga game that follows the rules of Candy Crush Soda Saga. It is a plain HTML5/JavaScript web app with no build step, and it installs as a full-screen offline app (PWA). It is built for the Samsung Galaxy Tab A9+.
 
-It is a sister project of [Candy_Crush_Clone](https://github.com/scruff2/Candy_Crush_Clone) (the classic Saga rules).
+It is a sister project of [Sugar Swap Saga](https://github.com/scruff2/sugar-swap-saga) (the classic Saga rules).
 
 ## Soda rules
 
@@ -49,23 +51,53 @@ Inside the soda, candies **float upward**, and new candies bubble up from the bo
 - Stars, lives and boosters.
 - Saved progress, kept separate from the Saga game.
 
-## Play on the tablet
+## Install
 
-Serve the folder, then open it in Chrome on the tablet.
+### On an Android phone or tablet (recommended)
+
+1. Open **https://scruff2.github.io/soda-swap-saga/** in Chrome.
+2. Tap **Install**, or use ⋮ → *Add to Home screen* → *Install*.
+
+Soda Swap Saga installs as a full-screen app that works offline, and it updates itself when the game changes. This works on iPads and PCs too.
+
+### Or download the APK
+
+1. Download the latest `.apk` from **[Releases](https://github.com/scruff2/soda-swap-saga/releases/latest)** on the device.
+2. Open the file. If Android asks, allow your browser to **install unknown apps**, then tap **Install**.
+
+New APK versions install over the old one and keep your progress.
+
+### For development
+
+To run the game from this computer on a tablet connected over Wi-Fi debugging, serve the folder:
 
 ```bash
 python3 -m http.server 8766 --bind 0.0.0.0
 ```
 
-With Wireless debugging on, run:
+Then forward the port so the tablet can reach it:
 
 ```bash
 adb reverse tcp:8766 tcp:8766
 ```
 
-Then open `http://localhost:8766` on the tablet and use **⋮ → Add to Home screen → Install**.
+On the tablet, open `http://localhost:8766`.
 
-It uses port 8766, so it installs as a separate app from the Saga clone, which uses port 8765.
+## Releasing a new APK
+
+Tag a version and push the tag:
+
+```bash
+git tag v1.1.0
+```
+
+```bash
+git push origin v1.1.0
+```
+
+GitHub Actions then packages the game with Capacitor, signs it, and attaches it to a new release. Bump `VERSION` in `sw.js` whenever the game files change, so installed web copies update.
+
+Signing uses two repository secrets, `ANDROID_KEYSTORE_B64` and `ANDROID_KEYSTORE_PASSWORD`. Every release must use the same key, otherwise updates won't install over existing copies.
 
 ## Development
 
